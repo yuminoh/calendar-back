@@ -3,7 +3,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.calendar.mapper.UserMapper">
+    <resultMap id="userMap" type="com.project.calendar.dto.UserDto">
+        <result column="no" property="no"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_pw" property="userPw"/>
+        <result column="salt" property="salt"/>
+        <result column="address1" property="address1"/>
+        <result column="address2" property="address2"/>
+        <result column="email" property="email"/>
+        <result column="tell" property="tell"/>
+    </resultMap>
+
     <select id="selectUserList" resultType="com.project.calendar.dto.UserDto">
         select * from user
+    </select>
+
+    <insert id="setInsertUser" parameterType="com.project.calendar.dto.UserDto">
+        insert into user(user_id, salt, user_pw, address1, address2, email, tell)
+        values(#{userId}, #{salt}, #{userPw}, #{address1}, #{address2}, #{email}, #{tell})
+
+    </insert>
+<!-- db컬럼과 dto가 달라서 null로 매핑/1. dto를 db처럼 변경/2. as로 매핑/3. resultmap -->
+    <select id="findByLoginId" resultMap="userMap">
+        select * from user where user_id=#{id}
     </select>
 </mapper>
